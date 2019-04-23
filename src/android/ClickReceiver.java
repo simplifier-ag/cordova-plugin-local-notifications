@@ -53,7 +53,9 @@ public class ClickReceiver extends AbstractClickReceiver {
         JSONObject data = new JSONObject();
 
         setTextInput(action, data);
-        launchAppIf();
+
+        // preventing calling lauch activity if CDV-Activity is not Launcher activity
+        //launchAppIf();
 
         fireEvent(action, notification, data);
 
