@@ -53,7 +53,8 @@ public class ClickReceiver extends AbstractClickReceiver {
         JSONObject data = new JSONObject();
 
         setTextInput(action, data);
-        launchAppIf();
+        //preventing default activity launch
+        //launchAppIf();
 
         fireEvent(action, notification, data);
 
