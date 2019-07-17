@@ -54,8 +54,7 @@ public class ClickReceiver extends AbstractClickReceiver {
 
         setTextInput(action, data);
 
-        // preventing calling lauch activity if CDV-Activity is not Launcher activity
-        //launchAppIf();
+        launchAppIf();
 
         fireEvent(action, notification, data);
 
