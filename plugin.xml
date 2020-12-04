@@ -24,7 +24,7 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
         xmlns:android="http://schemas.android.com/apk/res/android"
         id="cordova-plugin-local-notification"
-        version="0.9.2">
+        version="0.9.3">
 
     <name>LocalNotification</name>
 
@@ -125,7 +125,6 @@
 
             <receiver
                 android:name="de.appplant.cordova.plugin.localnotification.RestoreReceiver"
-                android:directBootAware="true"
                 android:exported="false" >
                 <intent-filter>
                     <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
