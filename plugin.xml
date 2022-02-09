@@ -24,7 +24,7 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
         xmlns:android="http://schemas.android.com/apk/res/android"
         id="cordova-plugin-local-notification"
-        version="0.9.3">
+        version="1.0.0">
 
     <name>LocalNotification</name>
 
@@ -42,7 +42,7 @@
     <engines>
         <engine name="cordova"         version=">=7.1.0"  />
         <engine name="cordova-plugman" version=">=4.3.0"  />
-        <engine name="cordova-android" version=">=6.3.0"  />
+        <engine name="cordova-android" version=">=10.0.0"  />
         <engine name="cordova-windows" version=">=4.2.0"  />
         <!-- <engine name="android-sdk"     version=">=26" /> -->
         <engine name="apple-ios"       version=">=10.0.0" />
@@ -100,7 +100,7 @@
             </feature>
         </config-file>
 
-        <config-file target="AndroidManifest.xml" parent="/manifest/application">
+        <config-file target="AndroidManifest.xml" parent="application">
             <provider
                 android:name="de.appplant.cordova.plugin.notification.util.AssetProvider"
                 android:authorities="${applicationId}.localnotifications.provider"
@@ -133,7 +133,8 @@
             </receiver>
         </config-file>
 
-        <config-file target="AndroidManifest.xml" parent="/manifest">
+        <config-file target="AndroidManifest.xml" parent="/*">
+            <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
             <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
             <uses-permission android:name="android.permission.WAKE_LOCK" />
         </config-file>
@@ -183,6 +184,10 @@
             target-dir="src/de/appplant/cordova/plugin/notification/receiver" />
 
         <source-file
+            src="src/android/notification/receiver/AbstractNotificationReceiver.java"
+            target-dir="src/de/appplant/cordova/plugin/notification/receiver" />
+            
+        <source-file
             src="src/android/notification/receiver/AbstractTriggerReceiver.java"
             target-dir="src/de/appplant/cordova/plugin/notification/receiver" />
 
@@ -207,6 +212,10 @@
             target-dir="src/de/appplant/cordova/plugin/notification/util" />
 
         <source-file
+            src="src/android/notification/util/LaunchUtils.java"
+            target-dir="src/de/appplant/cordova/plugin/notification/util" />
+
+        <source-file
             src="src/android/notification/Builder.java"
             target-dir="src/de/appplant/cordova/plugin/notification" />
 
@@ -216,6 +225,10 @@
 
         <source-file
             src="src/android/notification/Notification.java"
+            target-dir="src/de/appplant/cordova/plugin/notification" />
+
+        <source-file
+            src="src/android/notification/NotificationVolumeManager.java"
             target-dir="src/de/appplant/cordova/plugin/notification" />
 
         <source-file
