@@ -55,6 +55,18 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import androidx.collection.ArraySet;
+import androidx.core.app.NotificationCompat;
+
+import static android.app.AlarmManager.RTC;
+import static android.app.AlarmManager.RTC_WAKEUP;
+import static android.os.Build.VERSION.SDK_INT;
+import static android.os.Build.VERSION_CODES.M;
+import static androidx.core.app.NotificationCompat.PRIORITY_HIGH;
+import static androidx.core.app.NotificationCompat.PRIORITY_MAX;
+import static androidx.core.app.NotificationCompat.PRIORITY_MIN;
+
+import de.appplant.cordova.plugin.notification.util.LaunchUtils;
 
 /**
  * Wrapper class around OS notification class. Handles basic operations
@@ -219,8 +231,7 @@ public final class Notification {
             if (!date.after(new Date()) && trigger(intent, receiver))
                 continue;
 
-            PendingIntent pi = PendingIntent.getBroadcast(
-                    context, 0, intent, FLAG_UPDATE_CURRENT | FLAG_IMMUTABLE);
+            PendingIntent pi = LaunchUtils.getBroadcastPendingIntent(context, intent);
 
             try {
                 switch (options.getPrio()) {
@@ -306,10 +317,7 @@ public final class Notification {
 
         for (String action : actions) {
             Intent intent = new Intent(action);
-
-            PendingIntent pi = PendingIntent.getBroadcast(
-                    context, 0, intent, FLAG_IMMUTABLE);
-
+            PendingIntent pi = LaunchUtils.getBroadcastPendingIntent(context, intent);
             if (pi != null) {
                 getAlarmMgr().cancel(pi);
             }

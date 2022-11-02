@@ -51,6 +51,10 @@
 
 ## Important Notice
 
+If the app is in background, it must not be launched but put in foreground.
+To avoid launching the app in this case, add the following in your config.xml file:
+`<preference name="AndroidLaunchMode" value="singleInstance"/>`
+
 Please make sure that you always read the tagged README for the version you're using.
 
 See the _0.8_ branch if you cannot upgrade. Further development for `v0.9-beta` will happen here. The `0.9-dev` and `ios10` branches are obsolate and will be removed soon.
@@ -62,6 +66,11 @@ __Known issues__
 
 Please report bugs or missing features!
 
+## Install
+```bash
+npm i cordova-plugin-local-notification-12
+cordova plugin add cordova-plugin-local-notification-12
+```
 
 ## Basics
 
@@ -528,11 +537,13 @@ See the sample app for how to use them.
 
 | Method   | Method            | Method          | Method         | Method        | Method           |
 | :------- | :---------------- | :-------------- | :------------- | :------------ | :--------------- |
-| schedule | cancelAll         | isTriggered     | get            | removeActions | un                              |
+| schedule | cancelAll         | isTriggered     | get            | removeActions |  un                              |
 | update   | hasPermission     | getType         | getAll         | hasActions    | fireQueuedEvents                |
 | clear    | requestPermission | getIds          | getScheduled   | getDefaults   | requestDoNotDisturbPermissions  |
 | clearAll | isPresent         | getScheduledIds | getTriggered   | setDefaults   | hasDoNotDisturbPermissions      |
 | cancel   | isScheduled       | getTriggeredIds | addActions     | on            |
+| setDummyNotifications | 
+
 
 
 ## Installation
@@ -574,7 +585,7 @@ Made with :yum: from Leipzig
 © 2013 [appPlant GmbH][appplant]
 
 
-[ticket_template]: https://github.com/katzer/cordova-plugin-local-notifications/issues/1188
+[ticket_template]: https://github.com/simplifier-ag/cordova-plugin-local-notifications/issues/1188
 [cordova]: https://cordova.apache.org
 [CLI]: http://cordova.apache.org/docs/en/edge/guide_cli_index.md.html#The%20Command-line%20Interface
 [npm]: https://www.npmjs.com/package/cordova-plugin-local-notification

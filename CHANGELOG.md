@@ -141,5 +141,5 @@ Please also read the [Upgrade Guide](https://github.com/katzer/cordova-plugin-lo
 - Renamed some local notification properties
  - `date`, `json`, `message` and `repeat`
  - Scheduling local notifications with the deprecated properties is still possible
-- [Kitchen Sink sample app](https://github.com/katzer/cordova-plugin-local-notifications/tree/example)
-- [Wiki](https://github.com/katzer/cordova-plugin-local-notifications/wiki)
+- [Kitchen Sink sample app](https://github.com/simplifier-ag/cordova-plugin-local-notifications/tree/example)
+- [Wiki](https://github.com/simplifier-ag/cordova-plugin-local-notifications/wiki)

@@ -119,9 +119,10 @@
                 android:name="de.appplant.cordova.plugin.localnotification.ClearReceiver"
                 android:exported="false" />
 
-            <service
+            <activity
                 android:name="de.appplant.cordova.plugin.localnotification.ClickReceiver"
-                android:exported="false" />
+                android:exported="false"
+                android:theme="@style/Theme.AppCompat.NoActionBar" />
 
             <receiver
                 android:name="de.appplant.cordova.plugin.localnotification.RestoreReceiver"
@@ -191,6 +192,10 @@
             src="src/android/notification/receiver/AbstractTriggerReceiver.java"
             target-dir="src/de/appplant/cordova/plugin/notification/receiver" />
 
+        <source-file
+          src="src/android/notification/receiver/NotificationTrampolineActivity.java"
+          target-dir="src/de/appplant/cordova/plugin/notification/receiver" />
+          
         <source-file
             src="src/android/notification/trigger/DateTrigger.java"
             target-dir="src/de/appplant/cordova/plugin/notification/trigger" />
