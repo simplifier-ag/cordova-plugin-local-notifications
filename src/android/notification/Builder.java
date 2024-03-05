@@ -2,6 +2,7 @@
  * Apache 2.0 License
  *
  * Copyright (c) Sebastian Katzer 2017
+ * Contributor fquirin, Bhumin Bhandari, powowbox
  *
  * This file contains Original Code and/or Modifications of Original Code
  * as defined in and that are subject to the Apache License
@@ -39,15 +40,19 @@ import android.graphics.RectF;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.media.session.MediaSessionCompat;
+import android.graphics.Paint;
+import android.graphics.Canvas;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationCompat.MessagingStyle.Message;
 import androidx.media.app.NotificationCompat.MediaStyle;
 
 import java.util.List;
-import java.util.Random;
 
 import de.appplant.cordova.plugin.notification.action.Action;
+import de.appplant.cordova.plugin.notification.util.LaunchUtils;
+
+import static de.appplant.cordova.plugin.notification.Notification.EXTRA_UPDATE;
 
 /**
  * Builder class for local notifications. Build fully configured local
@@ -60,9 +65,6 @@ public final class Builder {
 
     // Notification options passed by JS
     private final Options options;
-
-    // To generate unique request codes
-    private final Random random = new Random();
 
     // Receiver to handle the clear event
     private Class<?> clearReceiver;
@@ -198,15 +200,14 @@ public final class Builder {
     void applyFullScreenIntent(NotificationCompat.Builder builder) {
         String pkgName  = context.getPackageName();
 
+        int notificationId  = options.getId();
         Intent intent = context
             .getPackageManager()
             .getLaunchIntentForPackage(pkgName)
-            .putExtra("launchNotificationId", options.getId());
+            .putExtra("launchNotificationId", notificationId);
 
-        int reqCode = random.nextInt();
-        // request code and flags not added for demo purposes
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, reqCode, intent, FLAG_UPDATE_CURRENT | FLAG_IMMUTABLE);
-
+        PendingIntent pendingIntent =
+          LaunchUtils.getActivityPendingIntent(context, intent, notificationId);
         builder.setFullScreenIntent(pendingIntent, true);
     }
 
@@ -228,14 +229,14 @@ public final class Builder {
         final int color = Color.RED;
         final Paint paint = new Paint();
         final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
-        final RectF rectF = new RectF(rect);
+        //final RectF rectF = new RectF(rect);
 
         paint.setAntiAlias(true);
         canvas.drawARGB(0, 0, 0, 0);
         paint.setColor(color);
-        float cx = bitmap.getWidth() / 2;
-        float cy = bitmap.getHeight() / 2;
-        float radius = cx < cy ? cx : cy;
+        float cx = bitmap.getWidth() / 2.0f;
+        float cy = bitmap.getHeight() / 2.0f;
+        float radius = Math.min(cx, cy);
         canvas.drawCircle(cx, cy, radius, paint);
 
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
@@ -390,19 +391,17 @@ public final class Builder {
         if (clearReceiver == null)
             return;
 
+        int notificationId = options.getId();
         Intent intent = new Intent(context, clearReceiver)
                 .setAction(options.getIdentifier())
-                .putExtra(Notification.EXTRA_ID, options.getId());
+                .putExtra(Notification.EXTRA_ID, notificationId);
 
         if (extras != null) {
             intent.putExtras(extras);
         }
 
-        int reqCode = random.nextInt();
-
-        PendingIntent deleteIntent = PendingIntent.getBroadcast(
-                context, reqCode, intent, FLAG_UPDATE_CURRENT | FLAG_IMMUTABLE);
-
+        PendingIntent deleteIntent =
+          LaunchUtils.getBroadcastPendingIntent(context, intent, notificationId);
         builder.setDeleteIntent(deleteIntent);
     }
 
@@ -417,8 +416,16 @@ public final class Builder {
         if (clickActivity == null)
             return;
 
+        Action[] actions = options.getActions();
+        if (actions != null && actions.length > 0 ) {
+          // if actions are defined, the user must click on button actions to launch the app.
+          // Don't make the notification clickable in this case
+          return;
+        }
+
+        int notificationId  =  options.getId();
         Intent intent = new Intent(context, clickActivity)
-                .putExtra(Notification.EXTRA_ID, options.getId())
+                .putExtra(Notification.EXTRA_ID, notificationId)
                 .putExtra(Action.EXTRA_ID, Action.CLICK_ACTION_ID)
                 .putExtra(Options.EXTRA_LAUNCH, options.isLaunchingApp())
                 .setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
@@ -427,11 +434,8 @@ public final class Builder {
             intent.putExtras(extras);
         }
 
-        int reqCode = random.nextInt();
-
-        PendingIntent contentIntent = PendingIntent.getService(
-                context, reqCode, intent, FLAG_UPDATE_CURRENT  | FLAG_IMMUTABLE);
-
+        PendingIntent contentIntent =
+          LaunchUtils.getTaskStackPendingIntent(context, intent, notificationId);
         builder.setContentIntent(contentIntent);
     }
 
@@ -467,8 +471,9 @@ public final class Builder {
      * @param action Notification action needing the PendingIntent
      */
     private PendingIntent getPendingIntentForAction (Action action) {
+        int notificationId =  options.getId();
         Intent intent = new Intent(context, clickActivity)
-                .putExtra(Notification.EXTRA_ID, options.getId())
+                .putExtra(Notification.EXTRA_ID, notificationId)
                 .putExtra(Action.EXTRA_ID, action.getId())
                 .putExtra(Options.EXTRA_LAUNCH, action.isLaunchingApp())
                 .setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
@@ -477,10 +482,7 @@ public final class Builder {
             intent.putExtras(extras);
         }
 
-        int reqCode = random.nextInt();
-
-        return PendingIntent.getService(
-                context, reqCode, intent, FLAG_UPDATE_CURRENT | FLAG_IMMUTABLE);
+      return LaunchUtils.getTaskStackPendingIntent(context, intent, notificationId);
     }
 
     /**
@@ -489,7 +491,8 @@ public final class Builder {
      * @return true in case of an updated version.
      */
     private boolean isUpdate() {
-        return extras != null && extras.getBoolean(EXTRA_UPDATE, false);
+        return extras != null
+            && extras.getBoolean(EXTRA_UPDATE, false);
     }
 
     /**

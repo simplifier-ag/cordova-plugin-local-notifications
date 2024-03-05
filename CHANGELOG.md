@@ -1,6 +1,27 @@
 ChangeLog
 ---------
 
+#### Version 1.1.0
+- Added default (and custom) `options` to `setDummyNotification(options)` for `channelId` and `channelName`
+- More Android code clean-ups
+
+#### Version 0.10.0
+- Fixed Android 12 bug to make notifications clickable (@powowbox) by replacing the action handler services with activities (avoid notification trampoline restrictions)
+- Merged forks of @timkellypa and @bhandaribhumin (cordova-plugin-local-notification-12) back into original fork
+- Android code clean-up and refactoring (@powowbox, @fquirin)
+- Removed 'beta' from version name ... everything about Android/Cordova is 'beta' anyway ;-)
+
+#### Version 0.9.0-beta.5 (from cordova-plugin-local-notification-12 by @bhandaribhumin)
+- Fixed bugs 🐛
+  - Added missing 'PendingIntent.FLAG_MUTABLE' and fixed gradle ("compile" is replaced by "implementation")
+  - Guard against webview crash
+  - Add thread identifier property
+  - Delete Alarms when intent is deleted
+  - Not calling delegate events if nil or if we're consuming the notification
+  - Android 13 `POST_NOTIFICATIONS ` permission and runtime popup added
+- New interfaces to ask for / register permissions required to schedule local notifications
+ - New method addded for android `setDummyNotification()`
+
 #### Version 1.0.0
 - Platform enhancements
   - Android 8-10 device support
