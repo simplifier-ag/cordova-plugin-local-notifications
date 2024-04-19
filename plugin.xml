@@ -122,6 +122,9 @@
             <activity
                 android:name="de.appplant.cordova.plugin.localnotification.ClickReceiver"
                 android:exported="false"
+                android:launchMode="singleTop"
+                android:taskAffinity=""
+                android:excludeFromRecents="true"
                 android:theme="@style/Theme.AppCompat.NoActionBar" />
 
             <receiver
