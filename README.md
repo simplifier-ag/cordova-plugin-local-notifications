@@ -53,7 +53,7 @@
 
 If the app is in background, it must not be launched but put in foreground.
 To avoid launching the app in this case, add the following in your config.xml file:
-`<preference name="AndroidLaunchMode" value="singleInstance"/>`
+`<preference name="AndroidLaunchMode" value="singleTop"/>`
 
 Please make sure that you always read the tagged README for the version you're using.
 
@@ -66,11 +66,6 @@ __Known issues__
 
 Please report bugs or missing features!
 
-## Install
-```bash
-npm i cordova-plugin-local-notification-12
-cordova plugin add cordova-plugin-local-notification-12
-```
 
 ## Basics
 
