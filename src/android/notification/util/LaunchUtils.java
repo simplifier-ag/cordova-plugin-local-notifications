@@ -18,11 +18,10 @@ public final class LaunchUtils {
      return _random.nextInt();
    }
 
-   private static int getIntentFlags() {
-        int FLAG_MUTABLE = 33554432; // don't use pendingIntent.FLAG_MUTABLE, use numeric value instead to be able to compile api < 31
+    private static int getIntentFlags() {
         int flags = PendingIntent.FLAG_UPDATE_CURRENT;
         if (android.os.Build.VERSION.SDK_INT >= 31) {
-          flags |= FLAG_MUTABLE;
+            flags |= PendingIntent.FLAG_IMMUTABLE;
         }
         return flags;
     }
@@ -53,16 +52,16 @@ public final class LaunchUtils {
         String pkgName  = context.getPackageName();
 
         Intent intent = context
-            .getPackageManager()
-            .getLaunchIntentForPackage(pkgName);
+                .getPackageManager()
+                .getLaunchIntentForPackage(pkgName);
 
         if (intent == null)
             return;
 
         intent.addFlags(
-            FLAG_ACTIVITY_REORDER_TO_FRONT
-                | FLAG_ACTIVITY_SINGLE_TOP
-                | FLAG_ACTIVITY_NEW_TASK
+                FLAG_ACTIVITY_REORDER_TO_FRONT
+                        | FLAG_ACTIVITY_SINGLE_TOP
+                        | FLAG_ACTIVITY_NEW_TASK
         );
 
         context.startActivity(intent);
